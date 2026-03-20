@@ -119,8 +119,7 @@ fn search_like(
     author_role: Option<&str>,
     year_text: Option<&str>,
 ) -> AppResult<SearchResponse> {
-    let like_query = format!("%{query}%");
-    let escaped = escape_like_pattern(&like_query);
+    let escaped = format!("%{}%", escape_like_value(query));
 
     let total: i64 = connection.query_row(
         r#"
@@ -250,7 +249,7 @@ fn browse_messages(
     })
 }
 
-fn escape_like_pattern(input: &str) -> String {
+fn escape_like_value(input: &str) -> String {
     input
         .replace('\\', "\\\\")
         .replace('%', "\\%")
